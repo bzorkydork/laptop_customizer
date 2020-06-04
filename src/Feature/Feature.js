@@ -1,36 +1,28 @@
 import React from "react";
+import FEATURES from "../FEATURES/FEATURES";
+import FeatureItem from "../FeatureItem/FeatureItem";
+
 // Normalizes string as a slug - a string that is safe to use
 // in both URLs and html attributes
 import slugify from "slugify";
-// This object will allow us to
-// easily convert numbers into US dollar values
-const USCurrencyFormat = new Intl.NumberFormat("en-US", {
-  style: "currency",
-  currency: "USD",
-});
 
 export default function Feature(props) {
+  console.log(props);
   const { feature, idx } = props;
   const featureHash = feature + "-" + idx;
-  const options = props.features[feature].map((item) => {
+  const options = FEATURES[feature].map((item) => {
     const itemHash = slugify(JSON.stringify(item));
     return (
       <div key={itemHash} className="feature__item">
-        <input
-          type="radio"
-          id={itemHash}
-          className="feature__option"
-          name={slugify(feature)}
-          checked={item.name === props.selected[feature].name}
-          onChange={(e) => props.updateFeature(feature, item)}
+        <FeatureItem
+          feature={props.feature}
+          item={item}
+          selected={props.selected}
+          updateFeature={props.updateFeature}
         />
-        <label htmlFor={itemHash} className="feature__label">
-          {item.name} ({USCurrencyFormat.format(item.cost)})
-        </label>
       </div>
     );
   });
-
   return (
     <fieldset className="feature" key={featureHash}>
       <legend className="feature__name">
